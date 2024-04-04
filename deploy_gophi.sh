@@ -45,7 +45,7 @@ done
 
 echo -e "All commands have been run"
 echo -e "Le lien permettant d'accéder au serveur est le suivant : http://$randomstring.cloud.rt-cas-cyber.ch/"
-
+echo -e "Pour se connecter en SSH, il suffit de faire : ssh ubuntu@$ipadd depuis le WSL en utilisant la paire de clé SSH préconfigurée dans Openstack"
 sleep 1
 
 # Connexion à la machine et execution du phishing
