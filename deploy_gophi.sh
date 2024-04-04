@@ -33,7 +33,7 @@ openstack recordset create --type A --record $ipadd cloud.rt-cas-cyber.ch. $rand
 sleep 15
 
 commands=(
-        "hostname"
+        "date"
         "date"
         )
 
