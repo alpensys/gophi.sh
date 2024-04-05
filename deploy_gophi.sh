@@ -36,7 +36,7 @@ echo -e "DNS record created\n"
 # Delete if exist the IP address of the server on knows_hosts
 ssh-keygen -f "/home/rt/.ssh/known_hosts" -R "$ipadd"
 
-# Some echo to give informations about the current server
+# Some echo to give informations about the current server on a text file
 # The first echo will overwrite the existing file
 echo -e "The server name is : $defname" > server_info.txt
 echo -e "The admin URL of Gophish is : https://$randomstring.cloud.rt-cas-cyber.ch:3333/" >> server_info.txt
@@ -45,13 +45,14 @@ echo -e "To connect with SSH on the server, please use : ssh ubuntu@$ipadd with 
 # Copy of the config file on the destination server 
 scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$current_location"/config.json ubuntu@$ipadd:/home/ubuntu/config.json > /dev/null 2>&1
 
-# Array of commands that will be run on the server. These commands will deploy GoPhish.
+# Some echo to give general informations
 echo -e "\nInstallation and configuration of Gophish on destination server with IP $ipadd"
 echo -e "Once done, current output will display GoPhish logs and provide username and password. Please refer to server_info.txt file to get admin URL."
 echo -e "Please note that when you close or CTRL+C this terminal, GoPhish server will stop. You'll be still able to SSH to it and run gophish server manually.\n"
 
 sleep 5
 
+# Array of commands that will be run on the server. These commands will deploy GoPhish.
 commands=(
         "sudo apt install unzip -y > /dev/null 2>&1"
         "mkdir /home/ubuntu/server > /dev/null 2>&1"
