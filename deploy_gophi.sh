@@ -25,17 +25,15 @@ ipadd=$(openstack server show $defname -f json | jq -r '.addresses'| grep -oE "\
 
 echo -e "Server created with name $defname and IP $ipadd"
 
-# Getting the IP address of the server. "jq" package must be installed.
-ipadd=$(openstack server show $defname -f json | jq -r '.addresses'| grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b") 
-
 # Creation of a A record on the delegated DNS zone
 echo -e "\nCreation of an A record on the delegated DNS zone for FQDN $randomstring.cloud.rt-cas-cyber.ch"
 
 openstack recordset create --type A --record $ipadd cloud.rt-cas-cyber.ch. $randomstring > /dev/null 2>&1
 sleep 15
 
-echo "DNS record created"
+echo -e "DNS record created/n"
 
+# Delete if exist the IP address of the server on knows_hosts
 ssh-keygen -f "/home/rt/.ssh/known_hosts" -R "$ipadd"
 
 # Some echo to give informations about the current server
@@ -58,13 +56,14 @@ commands=(
         "sudo apt install unzip -y > /dev/null 2>&1"
         "mkdir /home/ubuntu/server > /dev/null 2>&1"
         "cd /home/ubuntu/server && wget https://github.com/gophish/gophish/releases/download/v0.12.1/gophish-v0.12.1-linux-64bit.zip > /dev/null 2>&1"
-        "sudo unzip /home/ubuntu/server/gophish-v0.12.1-linux-64bit.zip -d /home/ubuntu/server/ > /dev/null 2>&1"
+        "sudo unzip /home/ubuntu/server/gophish-v0.12.1-linux-64bit.zip -d /home/ubuntu/server/ && sudo rm /home/ubuntu/server/gophish-v0.12.1-linux-64bit.zip > /dev/null 2>&1"
         "sudo chmod +x /home/ubuntu/server/gophish > /dev/null 2>&1"
-        "sudo rm /home/ubuntu/server/config.json && sudo cp /home/ubuntu/config.json /home/ubuntu/server/ > /dev/null 2>&1"
+        "sudo rm /home/ubuntu/server/config.json && sudo mv /home/ubuntu/config.json /home/ubuntu/server/ > /dev/null 2>&1"
+        "sudo snap install --classic certbot"
         "cd /home/ubuntu/server && sudo ./gophish > gophish.log"
         )
 
-        #Il reste à générer un certificat
+        #sudo certbot certonly -n --standalone --register-unsafely-without-email -d dcece22318.cloud.rt-cas-cyber.ch --agree-tos 
 
 # For boucle to execute the commands defined above
 for command in "${commands[@]}"; do
