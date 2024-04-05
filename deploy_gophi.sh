@@ -29,7 +29,7 @@ echo -e "Server created with name $defname and IP $ipadd"
 echo -e "\nCreation of an A record on the delegated DNS zone for FQDN $randomstring.cloud.rt-cas-cyber.ch"
 
 openstack recordset create --type A --record $ipadd cloud.rt-cas-cyber.ch. $randomstring > /dev/null 2>&1
-sleep 10
+sleep 15
 
 echo -e "DNS record created\n"
 
@@ -43,14 +43,14 @@ echo -e "The admin URL of Gophish is : https://$randomstring.cloud.rt-cas-cyber.
 echo -e "To connect with SSH on the server, please use : ssh ubuntu@$ipadd with the certificate used on Openstack" >> server_info.txt
 
 # Copy of the config file on the destination server 
-scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$current_location"/config.json ubuntu@$ipadd:/home/ubuntu/config.json > /dev/null 2>&1
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$current_location"/config.json ubuntu@$ipadd:/home/ubuntu/config.json 
 
 # Some echo to give general informations
 echo -e "\nInstallation and configuration of Gophish on destination server with IP $ipadd"
 echo -e "Once done, current output will display GoPhish logs and provide username and password. Please refer to server_info.txt file to get admin URL."
 echo -e "Please note that when you close or CTRL+C this terminal, GoPhish server will stop. You'll be still able to SSH to it and run gophish server manually.\n"
 
-sleep 5
+sleep 10
 
 # Array of commands that will be run on the server. These commands will deploy GoPhish.
 commands=(
@@ -60,7 +60,8 @@ commands=(
         "sudo unzip /home/ubuntu/server/gophish-v0.12.1-linux-64bit.zip -d /home/ubuntu/server/ > /dev/null 2>&1"
         "sudo rm /home/ubuntu/server/gophish-v0.12.1-linux-64bit.zip > /dev/null 2>&1"
         "sudo chmod +x /home/ubuntu/server/gophish > /dev/null 2>&1"
-        "sudo rm /home/ubuntu/server/config.json && sudo mv /home/ubuntu/config.json /home/ubuntu/server/ > /dev/null 2>&1"
+        "sudo rm /home/ubuntu/server/config.json"
+        "sudo cp /home/ubuntu/config.json /home/ubuntu/server/ > /dev/null 2>&1"
         "sudo snap install --classic certbot > /dev/null 2>&1"
         "sudo ln -s /snap/bin/certbot /usr/bin/certbot > /dev/null 2>&1"
         "sudo certbot certonly -n --standalone --register-unsafely-without-email -d $randomstring.cloud.rt-cas-cyber.ch --agree-tos > /dev/null 2>&1"
@@ -74,5 +75,5 @@ commands=(
 # For boucle to execute the commands defined above
 for command in "${commands[@]}"; do
         ssh ubuntu@$ipadd -o StrictHostKeyChecking=no "$command"
-        sleep 3
+        sleep 5
 done

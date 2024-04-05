@@ -11,3 +11,7 @@ Ce dépôt, le script et les fichiers de configurations ont été réalisé dans
 ## Documentation
 
 La documentation est accessible à l'adresse : https://docs.cloud.rt-cas-cyber.ch/
+
+## Améliorations
+
+Il arrive quelques fois que le fichier config.json ne soit pas envoyé au serveur ou pas copié dans le bon dossier.
