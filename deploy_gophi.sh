@@ -13,7 +13,7 @@ echo -e "\nWelcome to this automated script to deploy a complete installation of
 current_location="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 # Define the server name by using a random function
-randomstring=$(printf '%s' $(echo "$RANDOM" | md5sum) | cut -c 1-10)
+randomstring=$(printf '%s' $(echo "$RANDOM" | md5sum) | cut -c 1-3)
 defname="cas-cyber-""$randomstring"
 
 # Create the server in the Openstack environment
