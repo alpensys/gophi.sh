@@ -50,4 +50,4 @@ sleep 1
 
 # Connexion à la machine et execution du phishing
 
- ssh ubuntu@$ipadd -o StrictHostKeyChecking=no
+ #ssh ubuntu@$ipadd -o StrictHostKeyChecking=no
