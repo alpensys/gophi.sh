@@ -29,7 +29,7 @@ echo -e "Server created with name $defname and IP $ipadd"
 echo -e "\nCreation of an A record on the delegated DNS zone for FQDN $randomstring.cloud.rt-cas-cyber.ch"
 
 openstack recordset create --type A --record $ipadd cloud.rt-cas-cyber.ch. $randomstring > /dev/null 2>&1
-sleep 15
+sleep 10
 
 echo -e "DNS record created\n"
 
