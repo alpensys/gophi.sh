@@ -9,6 +9,10 @@
 
 echo "Welcome to this automated script to deploy a complete installation of GoPhish framework. It make it quick & easy."
 
+# Find the current location
+
+current_location="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
 # Define the server name by using a random function
 
 randomstring=$(printf '%s' $(echo "$RANDOM" | md5sum) | cut -c 1-10)
@@ -38,7 +42,7 @@ echo -e "To connect with SSH on the server, please use : ssh ubuntu@$ipadd with 
 
 # Copy of the config file on the destination server 
 
-#scp /home/rt/openstack/config.json ubuntu@$ipadd:/home/ubuntu/config.json
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$current_location"/config.json ubuntu@$ipadd:/home/ubuntu/config.json
 
 # Array of commands that will be run on the server. These commands will deploy GoPhish.
 
@@ -52,7 +56,7 @@ commands=(
         "cd /home/ubuntu/server && sudo ./gophish"
         )
 
-        #Il reste a modifier le fichier de config de gophish avant de lancer le serveur !
+        #Il reste à générer un certificat
 
 # For boucle to execute the commands defined above
 
