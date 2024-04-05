@@ -6,8 +6,10 @@ J'entends des fois : Oui mais mettre en place une infrastructure de phishing c'e
 
 A faire mtn sur le script :
 
-- Remplacer le setup de zPhisher par un setup de Gophish
-- Passage en HTTPs GoPhish
+- Modification de la config GoPhish
+- Passage en HTTPs GoPhish avec certificat signé
+- Lancement de GoPhish en background
+- Récupération du login admin par le script
 
 ## Documentation
 

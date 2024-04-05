@@ -33,9 +33,15 @@ openstack recordset create --type A --record $ipadd cloud.rt-cas-cyber.ch. $rand
 sleep 15
 
 commands=(
-        "date"
-        "date"
+        "sudo apt install unzip -y"
+        "mkdir /home/ubuntu/server"
+        "cd /home/ubuntu/server && wget https://github.com/gophish/gophish/releases/download/v0.12.1/gophish-v0.12.1-linux-64bit.zip"
+        "sudo unzip /home/ubuntu/server/gophish-v0.12.1-linux-64bit.zip -d /home/ubuntu/server/"
+        "sudo chmod +x /home/ubuntu/server/gophish"
+        "cd /home/ubuntu/server && sudo ./gophish"
         )
+
+        #Il reste a modifier le fichier de config de gophish avant de lancer le serveur !
 
 # Boucle sur la liste des commandes et exécution via
 for command in "${commands[@]}"; do
@@ -44,10 +50,9 @@ for command in "${commands[@]}"; do
 done
 
 echo -e "All commands have been run"
-echo -e "Le lien permettant d'accéder au serveur est le suivant : http://$randomstring.cloud.rt-cas-cyber.ch/"
+echo -e "Le lien permettant d'accéder au serveur est le suivant : https://$randomstring.cloud.rt-cas-cyber.ch:3333/"
 echo -e "Pour se connecter en SSH, il suffit de faire : ssh ubuntu@$ipadd depuis le WSL en utilisant la paire de clé SSH préconfigurée dans Openstack"
 sleep 1
 
 # Connexion à la machine et execution du phishing
-
- #ssh ubuntu@$ipadd -o StrictHostKeyChecking=no
+ # ssh ubuntu@$ipadd -o StrictHostKeyChecking=no
