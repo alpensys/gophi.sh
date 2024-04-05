@@ -31,7 +31,7 @@ echo -e "\nCreation of an A record on the delegated DNS zone for FQDN $randomstr
 openstack recordset create --type A --record $ipadd cloud.rt-cas-cyber.ch. $randomstring > /dev/null 2>&1
 sleep 15
 
-echo -e "DNS record created/n"
+echo -e "DNS record created\n"
 
 # Delete if exist the IP address of the server on knows_hosts
 ssh-keygen -f "/home/rt/.ssh/known_hosts" -R "$ipadd"
@@ -48,7 +48,7 @@ scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$current_locati
 # Array of commands that will be run on the server. These commands will deploy GoPhish.
 echo -e "\nInstallation and configuration of Gophish on destination server with IP $ipadd"
 echo -e "Once done, current output will display GoPhish logs and provide username and password. Please refer to server_info.txt file to get admin URL."
-echo -e "Please note that when you close or CTRL+C this terminal, GoPhish server will stop. You'll be still able to SSH to it and run it manually.\n"
+echo -e "Please note that when you close or CTRL+C this terminal, GoPhish server will stop. You'll be still able to SSH to it and run gophish server manually.\n"
 
 sleep 5
 
@@ -56,14 +56,19 @@ commands=(
         "sudo apt install unzip -y > /dev/null 2>&1"
         "mkdir /home/ubuntu/server > /dev/null 2>&1"
         "cd /home/ubuntu/server && wget https://github.com/gophish/gophish/releases/download/v0.12.1/gophish-v0.12.1-linux-64bit.zip > /dev/null 2>&1"
-        "sudo unzip /home/ubuntu/server/gophish-v0.12.1-linux-64bit.zip -d /home/ubuntu/server/ && sudo rm /home/ubuntu/server/gophish-v0.12.1-linux-64bit.zip > /dev/null 2>&1"
+        "sudo unzip /home/ubuntu/server/gophish-v0.12.1-linux-64bit.zip -d /home/ubuntu/server/ > /dev/null 2>&1"
+        "sudo rm /home/ubuntu/server/gophish-v0.12.1-linux-64bit.zip > /dev/null 2>&1"
         "sudo chmod +x /home/ubuntu/server/gophish > /dev/null 2>&1"
         "sudo rm /home/ubuntu/server/config.json && sudo mv /home/ubuntu/config.json /home/ubuntu/server/ > /dev/null 2>&1"
         "sudo snap install --classic certbot"
+        "sudo ln -s /snap/bin/certbot /usr/bin/certbot"
+        "sudo certbot certonly -n --standalone --register-unsafely-without-email -d $randomstring.cloud.rt-cas-cyber.ch --agree-tos"
+        "sudo cp /etc/letsencrypt/live/$randomstring.cloud.rt-cas-cyber.ch/fullchain.pem /home/ubuntu/server/gophish.crt"
+        "sudo cp /etc/letsencrypt/live/$randomstring.cloud.rt-cas-cyber.ch/privkey.pem /home/ubuntu/server/gophish.key"
+        "sudo chown ubuntu:ubuntu /home/ubuntu/server/gophish.crt"
+        "sudo chown ubuntu:ubuntu /home/ubuntu/server/gophish.key"
         "cd /home/ubuntu/server && sudo ./gophish > gophish.log"
         )
-
-        #sudo certbot certonly -n --standalone --register-unsafely-without-email -d dcece22318.cloud.rt-cas-cyber.ch --agree-tos 
 
 # For boucle to execute the commands defined above
 for command in "${commands[@]}"; do

@@ -1,3 +1,3 @@
-The server name is : cas-cyber-dcece22318
-The admin URL of Gophish is : https://dcece22318.cloud.rt-cas-cyber.ch:3333/
-To connect with SSH on the server, please use : ssh ubuntu@195.15.200.22 with the certificate used on Openstack
+The server name is : cas-cyber-1e37d53f4b
+The admin URL of Gophish is : https://1e37d53f4b.cloud.rt-cas-cyber.ch:3333/
+To connect with SSH on the server, please use : ssh ubuntu@195.15.254.188 with the certificate used on Openstack

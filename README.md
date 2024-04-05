@@ -8,7 +8,7 @@ Voici la solution, un script qui automatise le déploiement et la configuration 
 
 ## Améliorations attendues
 
-- Passage en HTTPs GoPhish avec certificat signé
+- Submitted data fonctionnel.
 
 ## Documentation
 
