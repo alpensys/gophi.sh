@@ -42,14 +42,16 @@ echo -e "The server name is : $defname" > server_info.txt
 echo -e "The admin URL of Gophish is : https://$randomstring.cloud.rt-cas-cyber.ch:3333/" >> server_info.txt
 echo -e "To connect with SSH on the server, please use : ssh ubuntu@$ipadd with the certificate used on Openstack" >> server_info.txt
 
+sleep 10
+
 # Copy of the config file on the destination server 
-scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$current_location"/config.json ubuntu@$ipadd:/home/ubuntu/config.json 
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$current_location"/config.json ubuntu@$ipadd:/home/ubuntu/config.json > /dev/null 2>&1
 
 # Some echo to give general informations
 echo -e "\nInstallation and configuration of Gophish on destination server with IP $ipadd"
 echo -e "Once done, current output will display GoPhish logs and provide username and password. Please refer to server_info.txt file to get admin URL."
 echo -e "Please note that when you close or CTRL+C this terminal, GoPhish server will stop. You'll be still able to SSH to it and run gophish server manually.\n"
-
+echo -e "The admin URL of Gophish is : https://$randomstring.cloud.rt-cas-cyber.ch:3333/\n"
 sleep 10
 
 # Array of commands that will be run on the server. These commands will deploy GoPhish.
