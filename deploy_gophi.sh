@@ -22,6 +22,9 @@ echo -e "It will automatically deploy a server in the Openstack environment defi
 	randomstring=$(printf '%s' $(echo "$RANDOM" | md5sum) | cut -c 1-3)
 	defname="cas-cyber-""$randomstring"
 
+	# Give actual hour of the day
+	now=date
+	echo -e "Time : $now"
 	# Create the server in the Openstack environment
 	echo -e "\nServer creation has been requested. Please wait..."
 	openstack server create --image "Ubuntu 22.04 LTS Jammy Jellyfish" --flavor a2-ram4-disk20-perf1 --key-name rt-rsa --network ext-net1 $defname --wait > /dev/null 2>&1
@@ -62,7 +65,8 @@ echo -e "It will automatically deploy a server in the Openstack environment defi
 
 	# Array of commands that will be run on the server. These commands will deploy GoPhish.
 	commands=(
-	        "sudo apt install unzip -y > /dev/null 2>&1"
+	        "sudo timedatectl set-timezone Europe/Zurich"
+			"sudo apt install unzip -y > /dev/null 2>&1"
 	        "mkdir /home/ubuntu/server > /dev/null 2>&1"
 	        "cd /home/ubuntu/server && wget https://github.com/gophish/gophish/releases/download/v0.12.1/gophish-v0.12.1-linux-64bit.zip > /dev/null 2>&1"
 	        "sudo unzip /home/ubuntu/server/gophish-v0.12.1-linux-64bit.zip -d /home/ubuntu/server/ > /dev/null 2>&1"
