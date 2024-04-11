@@ -23,8 +23,9 @@ echo -e "It will automatically deploy a server in the Openstack environment defi
 	defname="cas-cyber-""$randomstring"
 
 	# Give actual hour of the day
-	now=date
-	echo -e "Time : $now"
+	now=$(date)
+	echo -e "Starting time : $now"
+
 	# Create the server in the Openstack environment
 	echo -e "\nServer creation has been requested. Please wait..."
 	openstack server create --image "Ubuntu 22.04 LTS Jammy Jellyfish" --flavor a2-ram4-disk20-perf1 --key-name rt-rsa --network ext-net1 $defname --wait > /dev/null 2>&1
