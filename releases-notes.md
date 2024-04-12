@@ -15,4 +15,5 @@ The first version of the script has been released the 12th of April 2024. The ve
 | Version | Comment |
 |--|--|
 | 1-1-20240412 | First release |
+| 1-2-20240412 | Update of README |
 
