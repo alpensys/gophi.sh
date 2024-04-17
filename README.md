@@ -87,7 +87,7 @@ source < your-file >
 
 ### SSH key pair on OS
 
-Please update your SSH key pair to your OS infrastructure provider, It'll be usefull while running the script to permit a passwordless connection to the server.
+Upload your SSH key pair to your OS infrastructure provider, It'll be usefull while running the script to permit a passwordless connection to the server.
 Naturally, you also need to get it on your local host that is running the script.
 
 ### DNS delegation
